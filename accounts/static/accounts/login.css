@@ -1,0 +1,68 @@
+ /* ====== COLORES MODIFICABLES ====== */
+        :root {
+            --color-fondo: #f4f6fa;
+            --color-card: #ffffff;
+            --color-primario: #4a6cf7;
+            --color-primario-hover: #3954c6;
+            --color-texto: #333;
+        }
+
+        /* ====== ESTILOS GENERALES ====== */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--color-fondo);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: var(--color-card);
+            padding: 2rem;
+            width: 350px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 0;
+            color: var(--color-texto);
+        }
+
+        form p {
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: .7rem;
+            margin-top: .3rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: .8rem;
+            margin-top: 1rem;
+            border: none;
+            background-color: var(--color-primario);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: .2s;
+        }
+
+        button:hover {
+            background-color: var(--color-primario-hover);
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 1rem;
+        }

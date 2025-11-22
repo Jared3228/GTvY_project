@@ -1,0 +1,50 @@
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo-placeholder">
+            <span class="logo-icon">
+                <ion-icon name="cube-outline"></ion-icon>
+            </span>
+            <span class="logo-text">GTYV Dashboard</span>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <ul class="nav-list">
+            <!-- HOME -->
+            <li class="nav-item {% if request.path == '/' %}active{% endif %}">
+                <a href="{% url 'core:dashboard' %}" class="nav-link">
+                    <ion-icon name="home-outline"></ion-icon>
+                    <span class="link-text">Home</span>
+                </a>
+            </li>
+
+            <!-- DOCUMENTOS -->
+            <li class="nav-item {% if '/documentos' in request.path %}active{% endif %}">
+                <a href="{% url 'documentos:list' %}" class="nav-link">
+                    <ion-icon name="folder-outline"></ion-icon>
+                    <span class="link-text">Documentos</span>
+                </a>
+            </li>
+
+            <!-- REPORTES -->
+            <li class="nav-item {% if '/reportes' in request.path %}active{% endif %}">
+                <a href="{% url 'reportes:lista' %}" class="nav-link">
+                    <ion-icon name="bar-chart-outline"></ion-icon>
+                    <span class="link-text">Reportes</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="nav-spacer"></div>
+
+        <ul class="nav-list bottom-nav">
+            <!-- LOGOUT -->
+            <li class="nav-item {% if '/accounts/logout' in request.path %}active{% endif %}">
+                <a href="{% url 'accounts:logout' %}" class="nav-link logout-link">
+                    <ion-icon name="log-out-outline"></ion-icon>
+                    <span class="link-text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
