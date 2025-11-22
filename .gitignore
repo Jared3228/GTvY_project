@@ -1,19 +1,15 @@
 # Entorno virtual
-
 venv/
 .env
 
 # Django
-
-**pycache**/
-\*.pyc
+__pycache__/
+*.pyc
 db.sqlite3
 
-# Archivos estáticos recolectados
-
+# Archivos estáticos
 /staticfiles/
 /media/
 
 # VS Code
-
 .vscode/
