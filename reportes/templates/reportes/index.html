@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; gap: 2rem; align-items: flex-start;">
+
+    <!-- Panel izquierdo: generadores -->
+    <div style="min-width: 220px;">
+        <h2>Generar reportes</h2>
+        <ul>
+            <li>
+                <a href="{% url 'reportes:generar_constancia' %}">
+                    Constancia de residencias
+                </a>
+            </li>
+            <!-- Seguir la misma estructura para agregar otros -->
+            <li><a href="">Otro reporte</a></li>
+        </ul>
+    </div>
+
+    <!-- Panel derecho: lista de reportes -->
+    <div style="flex: 1;">
+        <h2>Reportes generados</h2>
+
+        {% if reportes %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="border-bottom: 1px solid #ccc; text-align:left;">ID</th>
+                        <th style="border-bottom: 1px solid #ccc; text-align:left;">Tipo</th>
+                        <th style="border-bottom: 1px solid #ccc; text-align:left;">Alumno</th>
+                        <th style="border-bottom: 1px solid #ccc; text-align:left;">No. control</th>
+                        <th style="border-bottom: 1px solid #ccc; text-align:left;">Fecha</th>
+                        <th style="border-bottom: 1px solid #ccc; text-align:left;">Estado</th>
+                        <th style="border-bottom: 1px solid #ccc; text-align:left;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in reportes %}
+                        <tr>
+                            <td>{{ r.id }}</td>
+                            <td>{{ r.get_tipo_display }}</td>
+                            <td>{{ r.nombre_alumno }}</td>
+                            <td>{{ r.numero_control }}</td>
+                            <td>{{ r.fecha }}</td>
+                            <td>{{ r.get_estado_display }}</td>
+                            <td>
+                                <a href="{% url 'reportes:detalle' r.pk %}">Ver</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay reportes generados todavía.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
