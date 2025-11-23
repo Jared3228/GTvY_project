@@ -47,10 +47,13 @@
         <ul class="nav-list bottom-nav">
             <!-- LOGOUT -->
             <li class="nav-item {% if '/accounts/logout' in request.path %}active{% endif %}">
-                <a href="{% url 'accounts:logout' %}" class="nav-link logout-link">
-                    <ion-icon name="log-out-outline"></ion-icon>
-                    <span class="link-text">Logout</span>
-                </a>
+                <form method="post" action="{% url 'accounts:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-link logout-link">
+                        <ion-icon name="log-out-outline"></ion-icon>
+                        <span class="link-text">Logout</span>
+                    </button>
+                </form>
             </li>
         </ul>
     </nav>
