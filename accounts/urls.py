@@ -12,7 +12,7 @@ urlpatterns = [
     ),
     path(
         'logout/',
-        LogoutView.as_view(next_page='core:dashboard'),
+        LogoutView.as_view(),
         name='logout'
     ),
 ]

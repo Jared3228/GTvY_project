@@ -196,3 +196,52 @@ body {
         font-size: 1.6rem; /* Slightly larger icons when collapsed */
     }
 }
+.filtros-convenios {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0 0 1rem 0;
+    flex-wrap: wrap;
+}
+
+.filtros-convenios select,
+.filtros-convenios input[type="checkbox"] {
+    cursor: pointer;
+}
+/* Convenio expirado */
+.card.expirado {
+    border-left: 6px solid #e53935;
+    background: #ffe5e5;
+}
+
+/* Convenio deshabilitado */
+.card.inactivo,
+.estado-deshabilitado {
+    opacity: 0.6;
+    border-left: 6px solid #757575;
+    background: #f0f0f0;
+}
+
+/* Badge de expirado */
+.estado-expirado {
+    display: inline-block;
+    padding: 3px 6px;
+    background: #e53935;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+/* Badge de deshabilitado */
+.estado-deshabilitado {
+    display: inline-block;
+    padding: 3px 6px;
+    background: #757575;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-bottom: 4px;
+}

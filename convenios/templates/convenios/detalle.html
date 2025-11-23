@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="detalle-convenio">
+    <h1>{{ convenio.nombre }}</h1>
+
+    <div class="detalle-meta">
+        <p><strong>Fecha de convenio:</strong> {{ convenio.fecha_convenio|date:"d/m/Y" }}</p>
+        <p><strong>Fecha de expiración:</strong>
+            {% if convenio.fecha_expiracion %}
+                {{ convenio.fecha_expiracion|date:"d/m/Y" }}
+            {% else %}
+                Sin fecha de expiración
+            {% endif %}
+        </p>
+        <p><strong>Contacto:</strong> {{ convenio.contacto|default:"—" }}</p>
+        <p><strong>Aprobado por:</strong>
+            {{ convenio.aprobado_por.get_full_name|default:convenio.aprobado_por.username }}
+        </p>
+        <p><strong>Estado:</strong> {{ convenio.activo|yesno:"Activo,Deshabilitado" }}</p>
+    </div>
+
+    <div class="detalle-descripcion">
+        <h2>Descripción</h2>
+        <p>{{ convenio.descripcion|linebreaksbr|default:"Sin descripción." }}</p>
+    </div>
+
+    <div class="detalle-acciones">
+        <a href="{% url 'convenios:editar' convenio.pk %}" class="btn btn-secondary">Editar</a>
+
+        <form action="{% url 'convenios:toggle_activo' convenio.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            {% if convenio.activo %}
+                <button type="submit" class="btn btn-danger">Deshabilitar</button>
+            {% else %}
+                <button type="submit" class="btn btn-success">Reactivar</button>
+            {% endif %}
+        </form>
+
+        <a href="{% url 'convenios:index' %}" class="btn btn-light">Volver a la lista</a>
+    </div>
+</div>
+{% endblock %}

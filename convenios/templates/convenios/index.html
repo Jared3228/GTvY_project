@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Convenios</h1>
+    <a href="{% url 'convenios:crear' %}" class="btn btn-primary">Nuevo convenio</a>
+</div>
+
+<form method="get" class="filtros-convenios">
+    <label for="id_orden">Ordenar por:</label>
+    <select name="orden" id="id_orden">
+        <option value="recientes" {% if orden == 'recientes' %}selected{% endif %}>
+            Más recientes primero
+        </option>
+        <option value="antiguos" {% if orden == 'antiguos' %}selected{% endif %}>
+            Más antiguos primero
+        </option>
+        <option value="pk_asc" {% if orden == 'pk_asc' %}selected{% endif %}>
+            ID ascendente
+        </option>
+        <option value="pk_desc" {% if orden == 'pk_desc' %}selected{% endif %}>
+            ID descendente
+        </option>
+    </select>
+
+    <label class="checkbox-inline">
+        <input type="checkbox" name="inactivos" value="1"
+               {% if inactivos %}checked{% endif %}>
+        Incluir deshabilitados
+    </label>
+
+    <button type="submit" class="btn btn-light">Aplicar</button>
+</form>
+
+<div class="cards-grid">
+    {% for convenio in convenios %}
+        <a href="{% url 'convenios:detalle' convenio.pk %}"
+          class="card 
+          {% if convenio.expirado %}expirado{% endif %}
+          {% if not convenio.activo %}inactivo{% endif %}">
+
+
+            <h2 class="card-title">{{ convenio.nombre }}</h2>
+
+            {% if convenio.expirado %}
+            <span class="estado-expirado">Expirada</span>
+            {% endif %}
+
+            {% if not convenio.activo %}
+            <span class="estado-deshabilitado">Deshabilitado</span>
+            {% endif %}
+
+            <p class="card-meta">
+                Firmado: {{ convenio.fecha_convenio|date:"d/m/Y" }}<br>
+                {% if convenio.fecha_expiracion %}
+                    Expira: {{ convenio.fecha_expiracion|date:"d/m/Y" }}
+                {% else %}
+                    Sin fecha de expiración
+                {% endif %}
+            </p>
+
+        </a>
+    {% empty %}
+        <p>No hay convenios registrados.</p>
+    {% endfor %}
+</div>
+{% endblock %}

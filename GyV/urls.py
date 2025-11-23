@@ -26,6 +26,7 @@ urlpatterns = [
     # Apps
     path('documentos/', include('documentos.urls', namespace='documentos')),
     path('reportes/', include('reportes.urls', namespace='reportes')),
+    path('convenios/', include('convenios.urls', namespace='convenios')),
 
     # Login/Logout
     path('accounts/', include('accounts.urls')),

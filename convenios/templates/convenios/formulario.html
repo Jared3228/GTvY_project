@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>
+    {% if object %}
+        Editar convenio
+    {% else %}
+        Nuevo convenio
+    {% endif %}
+</h1>
+
+<form method="post" class="form">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary">
+        Guardar
+    </button>
+
+    <a href="{% url 'convenios:index' %}" class="btn btn-light">Cancelar</a>
+</form>
+{% endblock %}

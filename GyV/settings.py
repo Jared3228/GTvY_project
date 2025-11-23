@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'core',
     'documentos',
     'reportes',
+    'convenios',
 ]
 
 MIDDLEWARE = [

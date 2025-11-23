@@ -17,7 +17,14 @@
                     <span class="link-text">Home</span>
                 </a>
             </li>
-
+                        
+            <!-- Convenios -->
+            <li class="nav-item {% if '/convenios' in request.path %}active{% endif %}">
+                <a href="{% url 'convenios:index' %}" class="nav-link">
+                    <ion-icon name="list-outline"></ion-icon>
+                    <span class="link-text">Convenios</span>
+                </a>
+            </li>
             <!-- DOCUMENTOS -->
             <li class="nav-item {% if '/documentos' in request.path %}active{% endif %}">
                 <a href="{% url 'documentos:list' %}" class="nav-link">
