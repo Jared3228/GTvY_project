@@ -2,42 +2,78 @@
 
 {% block content %}
 <div class="detalle-convenio">
-    <h1>{{ convenio.nombre }}</h1>
-
-    <div class="detalle-meta">
-        <p><strong>Fecha de convenio:</strong> {{ convenio.fecha_convenio|date:"d/m/Y" }}</p>
-        <p><strong>Fecha de expiración:</strong>
-            {% if convenio.fecha_expiracion %}
-                {{ convenio.fecha_expiracion|date:"d/m/Y" }}
+    <div class="detalle-header">
+        <h1>{{ convenio.nombre }}</h1>
+        <div class="detalle-estado">
+            {% if convenio.expirado %}
+            <span class="estado-badge estado-expirado">Expirado</span>
+            {% elif not convenio.activo %}
+            <span class="estado-badge estado-deshabilitado">Deshabilitado</span>
             {% else %}
-                Sin fecha de expiración
+            <span class="estado-badge estado-vigente">Vigente</span>
             {% endif %}
-        </p>
-        <p><strong>Contacto:</strong> {{ convenio.contacto|default:"—" }}</p>
-        <p><strong>Aprobado por:</strong>
-            {{ convenio.aprobado_por.get_full_name|default:convenio.aprobado_por.username }}
-        </p>
-        <p><strong>Estado:</strong> {{ convenio.activo|yesno:"Activo,Deshabilitado" }}</p>
+        </div>
     </div>
 
-    <div class="detalle-descripcion">
-        <h2>Descripción</h2>
-        <p>{{ convenio.descripcion|linebreaksbr|default:"Sin descripción." }}</p>
-    </div>
+    <div class="detalle-card">
+        <div class="detalle-meta-grid">
+            <div class="meta-item">
+                <span class="meta-label">Fecha de convenio</span>
+                <span class="meta-value">{{ convenio.fecha_convenio|date:"d/m/Y" }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Fecha de expiración</span>
+                <span class="meta-value">
+                    {% if convenio.fecha_expiracion %}
+                    {{ convenio.fecha_expiracion|date:"d/m/Y" }}
+                    {% else %}
+                    Indefinido
+                    {% endif %}
+                </span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Contacto</span>
+                <span class="meta-value">{{ convenio.contacto|default:"—" }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Aprobado por</span>
+                <span class="meta-value">
+                    {{ convenio.aprobado_por.get_full_name|default:convenio.aprobado_por.username }}
+                </span>
+            </div>
+        </div>
 
-    <div class="detalle-acciones">
-        <a href="{% url 'convenios:editar' convenio.pk %}" class="btn btn-secondary">Editar</a>
+        <div class="detalle-descripcion">
+            <h2>Descripción</h2>
+            <p>{{ convenio.descripcion|linebreaksbr|default:"Sin descripción disponible." }}</p>
+        </div>
 
-        <form action="{% url 'convenios:toggle_activo' convenio.pk %}" method="post" style="display:inline;">
-            {% csrf_token %}
-            {% if convenio.activo %}
-                <button type="submit" class="btn btn-danger">Deshabilitar</button>
-            {% else %}
-                <button type="submit" class="btn btn-success">Reactivar</button>
-            {% endif %}
-        </form>
+        <div class="detalle-acciones">
+            <a href="{% url 'convenios:editar' convenio.pk %}" class="btn btn-secondary">
+                <ion-icon name="create-outline"></ion-icon>
+                Editar
+            </a>
 
-        <a href="{% url 'convenios:index' %}" class="btn btn-light">Volver a la lista</a>
+            <form action="{% url 'convenios:toggle_activo' convenio.pk %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                {% if convenio.activo %}
+                <button type="submit" class="btn btn-danger">
+                    <ion-icon name="ban-outline"></ion-icon>
+                    Deshabilitar
+                </button>
+                {% else %}
+                <button type="submit" class="btn btn-success">
+                    <ion-icon name="checkmark-circle-outline"></ion-icon>
+                    Reactivar
+                </button>
+                {% endif %}
+            </form>
+
+            <a href="{% url 'convenios:index' %}" class="btn btn-light">
+                <ion-icon name="arrow-back-outline"></ion-icon>
+                Volver a la lista
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}

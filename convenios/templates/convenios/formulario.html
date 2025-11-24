@@ -1,22 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>
-    {% if object %}
-        Editar convenio
-    {% else %}
-        Nuevo convenio
-    {% endif %}
-</h1>
+<div class="form-container">
+    <div class="page-header">
+        <h1>
+            {% if object %}
+            Editar convenio
+            {% else %}
+            Nuevo convenio
+            {% endif %}
+        </h1>
+    </div>
 
-<form method="post" class="form">
-    {% csrf_token %}
-    {{ form.as_p }}
+    <form method="post" class="form">
+        {% csrf_token %}
 
-    <button type="submit" class="btn btn-primary">
-        Guardar
-    </button>
+        <!-- Render form fields manually or loop if needed, but as_p is requested to be kept. 
+             We can wrap it to ensure styling applies to p tags inside. -->
+        <div class="form-fields">
+            {{ form.as_p }}
+        </div>
 
-    <a href="{% url 'convenios:index' %}" class="btn btn-light">Cancelar</a>
-</form>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <ion-icon name="save-outline"></ion-icon>
+                Guardar
+            </button>
+
+            <a href="{% url 'convenios:index' %}" class="btn btn-light">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
 {% endblock %}
