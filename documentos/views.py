@@ -1,104 +1,100 @@
-from django.http import JsonResponse, HttpResponseNotAllowed, Http404
-from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, DetailView, UpdateView
+from django.http import FileResponse, Http404
+from django.shortcuts import get_object_or_404
 
-from documentos.forms import DocumentForm
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.clickjacking import xframe_options_exempt
+
 from .models import Documento
-from django.shortcuts import redirect, render
-import json
-
-# Create your views here.
-
-# GET = listar documentos
-# POST = crear documento (para pruebas rápidas con Postman / fetch)
-@csrf_exempt
-@require_http_methods(["GET", "POST"])
-def documents_collection(request):
-    if request.method == "GET":
-        docs = list(
-            Documento.objects.values(
-                "id", "nombre", "descripcion", "fecha_creacion", "fecha_actualizacion"
-            )
-        )
-        return JsonResponse({"results": docs}, safe=False)
-
-    # POST (opcional por ahora)
-    data = json.loads(request.body.decode("utf-8"))
-    doc = Documento.objects.create(
-        nombre=data.get("nombre", "Sin título"),
-        descripcion=data.get("descripcion", ""),
-    )
-    return JsonResponse(
-        {
-            "id": doc.id,
-            "nombre": doc.nombre,
-            "descripcion": doc.descripcion,
-            "fecha_creacion": doc.fecha_creacion,
-            "fecha_actualizacion": doc.fecha_actualizacion,
-        },
-        status=201,
-    )
+from .forms import DocumentoForm, DocumentoRevisionForm
 
 
-# DETALLE (por si luego antigravity quiere ver/editar uno solo)
-@csrf_exempt
-@require_http_methods(["GET", "PUT", "DELETE"])
-def document_detail(request, pk):
-    try:
-        doc = Documento.objects.get(pk=pk)
-    except Documento.DoesNotExist:
-        raise Http404("Documento no encontrado")
+class DocumentoListView(LoginRequiredMixin, ListView):
+    model = Documento
+    template_name = 'documentos/index.html'
+    context_object_name = 'documentos'
+    # usamos el ordering del modelo, no hace falta más
 
-    if request.method == "GET":
-        return JsonResponse(
-            {
-                "id": doc.id,
-                "nombre": doc.nombre,
-                "descripcion": doc.descripcion,
-                "fecha_creacion": doc.fecha_creacion,
-                "fecha_actualizacion": doc.fecha_actualizacion,
-            }
-        )
 
-    if request.method == "PUT":
-        data = json.loads(request.body.decode("utf-8"))
-        doc.nombre = data.get("nombre", doc.nombre)
-        doc.descripcion = data.get("descripcion", doc.descripcion)
-        doc.save()
-        return JsonResponse(
-            {
-                "id": doc.id,
-                "nombre": doc.nombre,
-                "descripcion": doc.descripcion,
-                "fecha_creacion": doc.fecha_creacion,
-                "fecha_actualizacion": doc.fecha_actualizacion,
-            }
-        )
+class DocumentoCreateView(LoginRequiredMixin, CreateView):
+    model = Documento
+    form_class = DocumentoForm
+    template_name = 'documentos/form.html'
+    success_url = reverse_lazy('documentos:lista')
 
-    # DELETE
-    doc.delete()
-    return JsonResponse({"message": "Documento eliminado"})
+    def form_valid(self, form):
+        documento = form.save(commit=False)
+        documento.creado_por = self.request.user
 
-def documents_page(request):
-    documentos = Documento.objects.all()
+        if documento.marcado_para_revision:
+            documento.estado = "revision"
+        else:
+            documento.estado = "borrador"
 
-    if request.method == "POST":
-        form = DocumentForm(request.POST)
-        if form.is_valid():
-            doc = form.save(commit=False)
-            if request.user.is_authenticated:
-                doc.creado_por = request.user
-            doc.estado = "borrador"
-            doc.save()
-            return redirect("documentos:list")
-    else:
-        form = DocumentForm()
+        documento.save()
+        return super().form_valid(form)
 
-    return render(
-        request,
-        "documentos/list.html",
-        {
-            "documentos": documentos,
-            "form": form,
-        },
+
+class DocumentoUpdateView(LoginRequiredMixin, UpdateView):
+    model = Documento
+    form_class = DocumentoForm
+    template_name = 'documentos/form.html'
+    success_url = reverse_lazy('documentos:lista')
+
+    def form_valid(self, form):
+        documento = form.save(commit=False)
+        if documento.marcado_para_revision:
+            documento.estado = "revision"
+        documento.save()
+        return super().form_valid(form)
+
+
+class DocumentoDetailView(LoginRequiredMixin, DetailView):
+    model = Documento
+    template_name = 'documentos/detalle.html'
+    context_object_name = 'documento'
+
+
+class BandejaRevisionView(PermissionRequiredMixin, ListView):
+    permission_required = 'documentos.puede_revisar_documentos'
+    model = Documento
+    template_name = 'documentos/bandeja_revision.html'
+    context_object_name = 'documentos'
+
+    def get_queryset(self):
+        return Documento.objects.filter(marcado_para_revision=True)
+
+
+class DocumentoRevisionUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = 'documentos.puede_revisar_documentos'
+    model = Documento
+    form_class = DocumentoRevisionForm
+    template_name = 'documentos/revision_detalle.html'
+    success_url = reverse_lazy('documentos:bandeja_revision')
+
+    def form_valid(self, form):
+        documento = form.save(commit=False)
+        if documento.estado in ['aprobado', 'rechazado']:
+            documento.marcado_para_revision = False
+        documento.save()
+        return super().form_valid(form)
+
+
+@login_required
+@xframe_options_exempt
+def documento_pdf_view(request, pk):
+    """
+    Devuelve el PDF para previsualizarlo en un iframe.
+    X-Frame-Options está desactivado solo aquí.
+    """
+    documento = get_object_or_404(Documento, pk=pk)
+
+    if not documento.archivo:
+        raise Http404("Este documento no tiene archivo asociado.")
+
+    return FileResponse(
+        documento.archivo.open('rb'),
+        content_type='application/pdf'
     )

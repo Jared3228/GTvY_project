@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ documento.titulo }}</h1>
+<p>{{ documento.descripcion }}</p>
+
+{% if documento.archivo %}
+    <h2>Previsualización</h2>
+
+    <div style="width: 100%; height: 80vh;">
+        <iframe
+            src="{% url 'documentos:pdf' documento.pk %}"
+            style="width: 100%; height: 100%; border: 1px solid #ccc;">
+        </iframe>
+    </div>
+
+    <p style="margin-top: 1rem;">
+        <a href="{{ documento.archivo.url }}" target="_blank" rel="noopener">
+            Abrir PDF en nueva pestaña
+        </a>
+    </p>
+{% else %}
+    <p>Este documento no tiene archivo asociado.</p>
+{% endif %}
+
+
+<a href="{% url 'documentos:lista' %}">Volver a la lista</a>
+{% endblock %}

@@ -1,14 +1,26 @@
-# documentos/urls.py
 from django.urls import path
-from . import views
+from .views import (
+    DocumentoListView,
+    DocumentoCreateView,
+    DocumentoDetailView,
+    DocumentoUpdateView,
+    BandejaRevisionView,
+    DocumentoRevisionUpdateView,
+    documento_pdf_view,
+)
 
 app_name = 'documentos'
 
 urlpatterns = [
-    # Vista html
-    path('', views.documents_page, name='list'),
+    path('', DocumentoListView.as_view(), name='lista'),
+    path('nuevo/', DocumentoCreateView.as_view(), name='crear'),
+    path('<int:pk>/', DocumentoDetailView.as_view(), name='detalle'),
+    path('<int:pk>/editar/', DocumentoUpdateView.as_view(), name='editar'),
 
-     # API
-    path("api/", views.documents_collection, name="api_list"),
-    path("api/<int:pk>/", views.document_detail, name="api_detail"),
+    # Previsualización PDF
+    path('pdf/<int:pk>/', documento_pdf_view, name='pdf'),
+
+    # Revisión jefe
+    path('revision/', BandejaRevisionView.as_view(), name='bandeja_revision'),
+    path('revision/<int:pk>/', DocumentoRevisionUpdateView.as_view(), name='revisar'),
 ]
