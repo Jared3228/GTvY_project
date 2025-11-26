@@ -1,0 +1,424 @@
+/* reportes.css */
+
+/* 
+   Estilos específicos para la App Reportes 
+   Mantiene la paleta de colores de main.css
+*/
+
+/* --- Layout Principal --- */
+.layout-reportes {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    /* Panel generadores fijo, lista flexible */
+    grid-template-rows: auto 1fr;
+    gap: 24px;
+    /* Altura mínima para ocupar buen espacio, pero permitiendo scroll si es necesario */
+    min-height: calc(100vh - 140px);
+}
+
+/* --- 1. Filtros (Arriba) --- */
+.filtros-reportes {
+    grid-column: 1 / -1;
+    background-color: var(--bg-color);
+    padding: 20px 24px;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-subtle);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+/* Inputs y Selects */
+.filtros-reportes input[type="text"],
+.filtros-reportes input[type="date"],
+.filtros-reportes select {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    /* Gris suave */
+    font-family: var(--font-family);
+    font-size: 0.95rem;
+    color: var(--text-color);
+    background-color: #f9fafb;
+    min-width: 220px;
+    transition: all 0.2s ease;
+}
+
+.filtros-reportes input:focus,
+.filtros-reportes select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(116, 207, 254, 0.15);
+}
+
+/* Botones en filtros */
+.filtros-reportes button {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Botón Buscar */
+.filtros-reportes button[type="submit"],
+.btn-buscar {
+    background-color: var(--primary-color);
+    color: #0c4a6e;
+    /* Texto oscuro para contraste en azul cielo */
+}
+
+.filtros-reportes button[type="submit"]:hover,
+.btn-buscar:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(116, 207, 254, 0.3);
+}
+
+/* Botón Limpiar */
+.btn-limpiar {
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid transparent;
+}
+
+.btn-limpiar:hover {
+    color: var(--text-color);
+    background-color: #f3f4f6;
+}
+
+/* --- 2. Panel Izquierdo (Generadores) --- */
+.panel-generadores {
+    background-color: var(--bg-color);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow-subtle);
+    height: fit-content;
+    /* Se ajusta al contenido */
+}
+
+.panel-generadores h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.panel-generadores a,
+.panel-generadores button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background-color: #f9fafb;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-size: 0.95rem;
+    text-align: left;
+}
+
+.panel-generadores a:hover,
+.panel-generadores button:hover {
+    background-color: #fff;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    color: var(--primary-hover);
+    /* Azul un poco más oscuro */
+    transform: translateX(4px);
+}
+
+/* --- 3. Panel Derecho (Lista de Reportes) --- */
+.panel-lista {
+    background-color: var(--bg-color);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-subtle);
+    overflow: hidden;
+    /* Para que la tabla respete los bordes redondeados */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Tabla Reportes */
+.tabla-reportes {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.tabla-reportes thead {
+    background-color: #f9fafb;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tabla-reportes th {
+    padding: 18px 24px;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.tabla-reportes td {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+.tabla-reportes tr:last-child td {
+    border-bottom: none;
+}
+
+.tabla-reportes tr:hover td {
+    background-color: #f8fafc;
+    /* Muy sutil al hover */
+}
+
+/* Acciones en la tabla */
+.tabla-reportes .acciones {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.tabla-reportes .btn-ver,
+.tabla-reportes .btn-pdf {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tabla-reportes .btn-ver {
+    background-color: rgba(116, 207, 254, 0.1);
+    color: #0284c7;
+    /* Azul legible */
+}
+
+.tabla-reportes .btn-ver:hover {
+    background-color: var(--primary-color);
+    color: #0c4a6e;
+}
+
+.tabla-reportes .btn-pdf {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+
+.tabla-reportes .btn-pdf:hover {
+    background-color: #e5e7eb;
+    color: #1f2937;
+}
+
+/* --- 4. Etiquetas de Estado (Badges) --- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1;
+}
+
+/* Estado: Generado (Azul/Neutro) */
+.badge.generado {
+    background-color: #eff6ff;
+    /* Blue 50 */
+    color: #2563eb;
+    /* Blue 600 */
+    border: 1px solid #dbeafe;
+}
+
+/* Estado: En Revisión (Naranja/Warning) */
+.badge.en_revision {
+    background-color: #fff7ed;
+    /* Orange 50 */
+    color: #ea580c;
+    /* Orange 600 */
+    border: 1px solid #ffedd5;
+}
+
+/* Estado: Aprobado (Verde/Success) */
+.badge.aprobado {
+    background-color: #ecfdf5;
+    /* Emerald 50 - Igual a main.css vigente */
+    color: #059669;
+    /* Emerald 600 */
+    border: 1px solid #d1fae5;
+}
+
+/* --- 5. Responsividad --- */
+
+/* Tablet (Vertical) y pantallas medianas */
+@media (max-width: 1024px) {
+    .layout-reportes {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr;
+        gap: 20px;
+    }
+
+    .panel-generadores {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 16px;
+        white-space: nowrap;
+        align-items: center;
+        /* Scroll suave horizontal */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .panel-generadores h3 {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+        margin-right: 20px;
+        border-right: 1px solid var(--border-color);
+        padding-right: 20px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .panel-generadores a,
+    .panel-generadores button {
+        padding: 10px 16px;
+        flex-shrink: 0;
+    }
+}
+
+/* Móvil */
+@media (max-width: 768px) {
+    .layout-reportes {
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .filtros-reportes {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px;
+    }
+
+    .filtros-reportes input,
+    .filtros-reportes select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .filtros-reportes button {
+        width: 100%;
+    }
+
+    .panel-generadores {
+        flex-wrap: wrap;
+        /* En móvil permitimos que bajen si son muchos */
+        white-space: normal;
+    }
+
+    .panel-generadores h3 {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        margin-right: 0;
+        padding-right: 0;
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+    }
+
+    .panel-generadores a,
+    .panel-generadores button {
+        width: 100%;
+        /* Botones full width en móvil para mejor toque */
+        justify-content: center;
+    }
+
+    /* Tabla responsiva básica con scroll */
+    .panel-lista {
+        overflow-x: auto;
+    }
+
+    .tabla-reportes th,
+    .tabla-reportes td {
+        padding: 12px 16px;
+        white-space: nowrap;
+        /* Evitar roturas feas en móvil, usuario hace scroll */
+    }
+}
+
+/* --- Botones reutilizables en toda la app Reportes --- */
+
+.btn-buscar,
+.btn-limpiar {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none; /* para <a> */
+    font-family: var(--font-family);
+}
+
+/* Botón principal (azul) */
+.btn-buscar {
+    background-color: var(--primary-color);
+    color: #0c4a6e; /* mismo tono que usas en filtros */
+}
+
+.btn-buscar:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(116, 207, 254, 0.3);
+}
+
+/* Botón secundario (limpiar / cancelar) */
+.btn-limpiar {
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid transparent;
+}
+
+.btn-limpiar:hover {
+    color: var(--text-color);
+    background-color: #f3f4f6;
+}

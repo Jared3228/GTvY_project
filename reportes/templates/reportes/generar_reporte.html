@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reportes.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="panel-lista" style="padding: 24px;">
+    <h1 style="margin-top: 0; margin-bottom: 8px;">{{ titulo_pagina }}</h1>
+    <p style="margin-top: 0; margin-bottom: 20px;">
+        Completa los datos y se generará un PDF que se guardará en el sistema.
+    </p>
+
+    <form method="post" class="form-generar-reporte">
+        {% csrf_token %}
+
+        <div class="form-group" style="margin-bottom: 16px;">
+            {{ form.nombre_alumno.label_tag }}
+            {{ form.nombre_alumno }}
+        </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+            {{ form.numero_control.label_tag }}
+            {{ form.numero_control }}
+        </div>
+
+        <div class="form-group" style="margin-bottom: 24px;">
+            {{ form.fecha.label_tag }}
+            {{ form.fecha }}
+        </div>
+
+        <button type="submit" class="btn-buscar">
+            Generar PDF
+        </button>
+
+        <a href="{% url 'reportes:index' %}" class="btn-limpiar" style="margin-left: 8px;">
+            Cancelar
+        </a>
+    </form>
+</div>
+
+{% endblock %}

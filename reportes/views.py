@@ -1,51 +1,157 @@
-# reportes/views.py
-from django.shortcuts import render, redirect
+from io import BytesIO
+from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from .forms import ConstanciaResidenciasForm
-from .models import Reporte
-from .services import generar_constancia_residencias
+from django.core.files.base import ContentFile
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import get_template
 from django.utils import timezone
+from django.views.generic import ListView
+
+from xhtml2pdf import pisa
+
+from .forms import DatosBasicosReporteForm
+from .models import Reporte
+
+
+def render_to_pdf(template_src, context_dict=None):
+    if context_dict is None:
+        context_dict = {}
+
+    template = get_template(template_src)
+    html = template.render(context_dict)
+
+    result = BytesIO()
+    pdf = pisa.pisaDocument(
+        BytesIO(html.encode('UTF-8')),
+        dest=result,
+        encoding='UTF-8'
+    )
+
+    if pdf.err:
+        return None
+
+    return result.getvalue()
+
+
+class ReporteListView(LoginRequiredMixin, ListView):
+    model = Reporte
+    template_name = 'reportes/index.html'
+    context_object_name = 'reportes'
+    # opcional: paginate_by = 20
+
+    def get_queryset(self):
+        qs = Reporte.objects.all()
+
+        # 🔎 Búsqueda por nombre o número de control
+        q = self.request.GET.get('q', '').strip()
+        if q:
+            qs = qs.filter(
+                Q(nombre_alumno__icontains=q) |
+                Q(numero_control__icontains=q)
+            )
+
+        # 📅 Orden
+        orden = self.request.GET.get('orden', 'recientes')
+
+        if orden == 'fecha_asc':
+            qs = qs.order_by('fecha', 'pk')
+        elif orden == 'fecha_desc':
+            qs = qs.order_by('-fecha', '-pk')
+        else:  # 'recientes' por defecto
+            qs = qs.order_by('-creado_en', '-pk')
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['q'] = self.request.GET.get('q', '').strip()
+        ctx['orden_actual'] = self.request.GET.get('orden', 'recientes')
+        return ctx
+
 
 @login_required
-def index_reportes(request):
-    # si quieres que sólo vea los suyos: filter(creado_por=request.user)
-    reportes = Reporte.objects.all().order_by('-creado_en')
-    return render(request, "reportes/index.html", {
-        "reportes": reportes,
-    })
+def detalle_reporte(request, pk):
+    reporte = get_object_or_404(Reporte, pk=pk)
+    return render(request, 'reportes/detalle_reporte.html', {'reporte': reporte})
+    # ↑ uso tu nombre de template anterior "detalle_report.html"
+
 
 @login_required
-def generate_const(request):
-    if request.method == "POST":
-        form = ConstanciaResidenciasForm(request.POST)
+def _generar_reporte_pdf(request, tipo, template_pdf, titulo_pagina):
+    """
+    Vista genérica: muestra el form, genera PDF con una plantilla y
+    guarda el Reporte con el archivo PDF.
+    """
+    if request.method == 'POST':
+        form = DatosBasicosReporteForm(request.POST)
         if form.is_valid():
             datos = form.cleaned_data
 
-            # 1) Generar contenido (por ahora solo HTML)
-            html = generar_constancia_residencias(datos)
+            contexto_pdf = {
+                'nombre_alumno': datos['nombre_alumno'],
+                'numero_control': datos['numero_control'],
+                'fecha': datos['fecha'],
+                'fecha_hoy': timezone.now().date(),
+            }
 
-            # 2) Crear el registro en la BD (sin archivo aún)
-            reporte = Reporte.objects.create(
-                tipo='CONSTANCIA_RESIDENCIA',
-                nombre_alumno=datos['nombre'],
+            pdf_bytes = render_to_pdf(template_pdf, contexto_pdf)
+
+            reporte = Reporte(
+                tipo=tipo,
+                nombre_alumno=datos['nombre_alumno'],
                 numero_control=datos['numero_control'],
                 fecha=datos['fecha'],
-                creado_por=request.user,
-                estado='generado'
+                creado_por=request.user if request.user.is_authenticated else None,
+                estado='generado',
             )
 
-            # 3) OPCIONAL: más adelante, aquí generas PDF, lo guardas en reporte.archivo y reporte.save()
+            if pdf_bytes:
+                nombre_archivo = f'{tipo}_{datos["numero_control"]}_{timezone.now().strftime("%Y%m%d%H%M%S")}.pdf'
+                reporte.archivo.save(nombre_archivo, ContentFile(pdf_bytes), save=False)
 
-            # 4) Mostrar detalle (previsualización) del reporte
+            reporte.save()
+
             return redirect('reportes:detalle', pk=reporte.pk)
     else:
-        form = ConstanciaResidenciasForm()
+        form = DatosBasicosReporteForm()
 
-    return render(request, "reportes/generate_const.html", {
-        "form": form
-    })
+    # Puedes usar tu generate_const.html como plantilla de formulario
+    return render(
+        request,
+        'reportes/generar_reporte.html',
+        {
+            'form': form,
+            'titulo_pagina': titulo_pagina,
+        }
+    )
+
 
 @login_required
-def detalle_report(request, pk):
-    reporte = Reporte.objects.get(pk=pk)
-    return render(request, "reportes/detalle_report.html", {"reporte": reporte})
+def generar_constancia_residencia(request):
+    return _generar_reporte_pdf(
+        request,
+        tipo='CONSTANCIA_RESIDENCIA',
+        template_pdf='reportes/pdf_constancia_residencias.html',
+        titulo_pagina='Constancia de residencias'
+    )
+
+
+@login_required
+def generar_constancia_servicio(request):
+    return _generar_reporte_pdf(
+        request,
+        tipo='CONSTANCIA_SERVICIO',
+        template_pdf='reportes/pdf_constancia_servicio.html',
+        titulo_pagina='Constancia de servicio social'
+    )
+
+
+@login_required
+def generar_constancia_practicas(request):
+    return _generar_reporte_pdf(
+        request,
+        tipo='CONSTANCIA_PRACTICAS',
+        template_pdf='reportes/pdf_constancia_practicas.html',
+        titulo_pagina='Constancia de prácticas profesionales'
+    )

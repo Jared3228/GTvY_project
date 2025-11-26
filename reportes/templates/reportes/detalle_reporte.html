@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reportes.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="panel-lista" style="padding: 24px;">
+    <h1 style="margin-top: 0; margin-bottom: 16px;">Detalle de reporte</h1>
+
+    <ul style="list-style: none; padding: 0; margin: 0 0 24px 0;">
+        <li style="margin-bottom: 8px;">
+            <strong>Tipo:</strong> {{ reporte.get_tipo_display }}
+        </li>
+        <li style="margin-bottom: 8px;">
+            <strong>Alumno:</strong> {{ reporte.nombre_alumno }}
+        </li>
+        <li style="margin-bottom: 8px;">
+            <strong>Número de control:</strong> {{ reporte.numero_control }}
+        </li>
+        <li style="margin-bottom: 8px;">
+            <strong>Fecha del documento:</strong> {{ reporte.fecha }}
+        </li>
+        <li style="margin-bottom: 8px;">
+            <strong>Estado:</strong>
+            <!-- aquí se activa el color del estado -->
+            <span class="badge {{ reporte.estado }}">
+                {{ reporte.get_estado_display }}
+            </span>
+        </li>
+        <li style="margin-bottom: 8px;">
+            <strong>Creado por:</strong> {{ reporte.creado_por|default:"—" }}
+        </li>
+        <li style="margin-bottom: 8px;">
+            <strong>Creado en:</strong> {{ reporte.creado_en }}
+        </li>
+    </ul>
+
+    <div style="display: flex; gap: 10px; justify-content: flex-start; flex-wrap: wrap;">
+        {% if reporte.archivo %}
+            <a href="{{ reporte.archivo.url }}" target="_blank" class="btn-buscar">
+                Ver / descargar PDF
+            </a>
+        {% endif %}
+
+        <a href="{% url 'reportes:index' %}" class="btn-limpiar">
+            ← Volver a la lista
+        </a>
+    </div>
+</div>
+
+{% endblock %}

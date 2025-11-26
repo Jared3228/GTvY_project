@@ -4,14 +4,16 @@ from django.db import models
 
 class Reporte(models.Model):
     TIPO_CHOICES = [
-        ('CONSTANCIA_RESIDENCIA', 'Constancia de residencias'),
-        # luego agregas más...
+        ('CONST_RES', 'Constancia de Residencias'),
+        ('CONST_SERV', 'Constancia de Servicio Social'),
+        ('CONST_PRA', 'Constancia de Prácticas Profesionales'),
     ]
 
     tipo = models.CharField(max_length=50, choices=TIPO_CHOICES)
     nombre_alumno = models.CharField(max_length=150)
     numero_control = models.CharField(max_length=20)
     fecha = models.DateField()
+    creado_en = models.DateTimeField(auto_now_add=True)
 
     creado_por = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -19,7 +21,6 @@ class Reporte(models.Model):
         null=True, blank=True,
         related_name='reportes_creados'
     )
-    creado_en = models.DateTimeField(auto_now_add=True)
 
     # Para el flujo futuro de revisión
     ESTADO_CHOICES = [

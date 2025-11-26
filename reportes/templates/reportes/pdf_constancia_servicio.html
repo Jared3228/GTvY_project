@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Constancia de Servicio Social</title>
+    <style>
+        body { font-family: DejaVu Sans, sans-serif; font-size: 12pt; }
+        h1 { text-align: center; font-size: 16pt; margin-bottom: 40px; }
+        p  { text-align: justify; line-height: 1.4; }
+        .datos { margin-top: 20px; margin-bottom: 30px; }
+        .firma { margin-top: 60px; text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>CONSTANCIA DE SERVICIO SOCIAL</h1>
+
+    <div class="datos">
+        Nombre: <strong>{{ nombre_alumno }}</strong><br>
+        Número de control: <strong>{{ numero_control }}</strong><br>
+        Fecha de emisión: <strong>{{ fecha }}</strong>
+    </div>
+
+    <p>
+        Se hace constar que la persona antes mencionada ha cumplido con la
+        prestación de su servicio social en la dependencia correspondiente,
+        cubriendo el número de horas y actividades requeridas.
+    </p>
+
+    <div class="firma">
+        _______________________________<br>
+        Responsable de Servicio Social
+    </div>
+</body>
+</html>
