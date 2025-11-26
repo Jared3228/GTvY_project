@@ -1,0 +1,309 @@
+/* ===== Página de documentos ===== */
+
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header (título + acciones) */
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.page-title {
+    font-size: 1.75rem;
+    margin: 0;
+}
+
+.page-subtitle {
+    margin: 0.25rem 0 0;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.page-actions a {
+    font-size: 0.9rem;
+}
+
+/* Cards generales (ya tienes algo parecido, esto solo refuerza) */
+.card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    margin-bottom: 0.75rem;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* ===== Filtros ===== */
+
+.filtros-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.filtros-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.filtro-item label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+}
+
+.filtro-item input,
+.filtro-item select {
+    width: 100%;
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 0.9rem;
+}
+
+.filtro-actions {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+/* ===== Tabla de documentos ===== */
+
+.documentos-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.9rem;
+}
+
+.documentos-table thead tr {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.documentos-table th,
+.documentos-table td {
+    padding: 0.7rem 0.9rem;
+    text-align: left;
+}
+
+.documentos-table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+.documentos-table .col-acciones {
+    white-space: nowrap;
+}
+
+.btn-link {
+    text-decoration: none;
+    color: #4f46e5;
+    font-weight: 500;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+.texto-vacio {
+    text-align: center;
+    padding: 1rem 0;
+    color: #6b7280;
+}
+
+/* ===== Badges / estados ===== */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* estado = 'borrador' | 'revision' | 'aprobado' | 'rechazado' */
+.estado-borrador {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.estado-revision {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.estado-aprobado {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.estado-rechazado {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* badge genérica que usamos en "Marcado para revisión" */
+.badge-info {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+.badge-muted {
+    background-color: #e5e7eb;
+    color: #4b5563;
+}
+
+/* ===== Detalle del documento (dl en dos columnas) ===== */
+
+.detalle-documento {
+    display: grid;
+    grid-template-columns: minmax(150px, 220px) minmax(0, 1fr);
+    row-gap: 0.4rem;
+    column-gap: 2rem;
+    margin: 0;
+}
+
+.detalle-row {
+    display: contents;
+}
+
+.detalle-row dt {
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.detalle-row dd {
+    margin: 0;
+    color: #111827;
+}
+
+/* ===== Formulario de nuevo documento ===== */
+
+.form-documento .form-fields p {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-width: 600px;
+}
+
+.form-documento label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-documento input[type="text"],
+.form-documento textarea,
+.form-documento select {
+    width: 100%;
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 0.9rem;
+}
+
+.form-documento input[type="file"] {
+    font-size: 0.85rem;
+}
+
+.form-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* --- Botones reutilizables en toda la app Reportes --- */
+
+.btn-buscar,
+.btn-limpiar {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none; /* para <a> */
+    font-family: var(--font-family);
+}
+
+/* Botón principal (azul) */
+.btn-buscar {
+    background-color: var(--primary-color);
+    color: #0c4a6e; /* mismo tono que usas en filtros */
+}
+
+.btn-buscar:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(116, 207, 254, 0.3);
+}
+
+/* Botón secundario (limpiar / cancelar) */
+.btn-limpiar {
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid transparent;
+}
+
+.btn-limpiar:hover {
+    color: var(--text-color);
+    background-color: #f3f4f6;
+}
+
+/* Botón primario */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.55rem 1.1rem;
+    min-height: 2.3rem;
+
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #ffffff;
+
+    font-weight: 600;
+    font-size: 0.9rem;
+
+    border-radius: 10px;
+    border: none;
+
+    box-shadow: 0 3px 10px rgba(79, 70, 229, 0.25);
+    cursor: pointer;
+    text-decoration: none;
+
+    transition: all 0.15s ease-out;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+    box-shadow: 0 5px 14px rgba(67, 56, 202, 0.35);
+    transform: translateY(-2px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(67, 56, 202, 0.25);
+}

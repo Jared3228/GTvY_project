@@ -1,28 +1,114 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/documentos.css' %}">
+{% endblock %}
 
 {% block content %}
-<h1>{{ documento.titulo }}</h1>
-<p>{{ documento.descripcion }}</p>
+<div class="page-container">
 
-{% if documento.archivo %}
-    <h2>Previsualización</h2>
-
-    <div style="width: 100%; height: 80vh;">
-        <iframe
-            src="{% url 'documentos:pdf' documento.pk %}"
-            style="width: 100%; height: 100%; border: 1px solid #ccc;">
-        </iframe>
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">{{ documento.nombre }}</h1>
+            <p class="page-subtitle">
+                Detalle del documento y previsualización del archivo PDF.
+            </p>
+        </div>
+        <div class="page-actions">
+            <a href="{% url 'documentos:lista' %}" class="btn-limpiar">
+                ← Volver al listado
+            </a>
+            {% if documento.archivo %}
+                <a href="{{ documento.archivo.url }}" target="_blank" rel="noopener" class="btn-primary">
+                    Abrir PDF en nueva pestaña
+                </a>
+            {% endif %}
+        </div>
     </div>
 
-    <p style="margin-top: 1rem;">
-        <a href="{{ documento.archivo.url }}" target="_blank" rel="noopener">
-            Abrir PDF en nueva pestaña
-        </a>
-    </p>
-{% else %}
-    <p>Este documento no tiene archivo asociado.</p>
-{% endif %}
+    <!-- Información general del documento -->
+    <div class="card">
+        <div class="card-body">
+            <dl class="detalle-documento">
+                <div class="detalle-row">
+                    <dt>Nombre</dt>
+                    <dd>{{ documento.nombre }}</dd>
+                </div>
 
+                <div class="detalle-row">
+                    <dt>Descripción</dt>
+                    <dd>{{ documento.descripcion|default:"Sin descripción" }}</dd>
+                </div>
 
-<a href="{% url 'documentos:lista' %}">Volver a la lista</a>
+                <div class="detalle-row">
+                    <dt>Estado</dt>
+                    <dd>
+                        <span class="badge estado-{{ documento.estado }}">
+                            {{ documento.get_estado_display }}
+                        </span>
+                    </dd>
+                </div>
+
+                <div class="detalle-row">
+                    <dt>Creado por</dt>
+                    <dd>
+                        {% if documento.creado_por %}
+                            {{ documento.creado_por.get_full_name|default:documento.creado_por.username }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </dd>
+                </div>
+
+                <div class="detalle-row">
+                    <dt>Fecha de creación</dt>
+                    <dd>{{ documento.fecha_creacion|date:"d/m/Y H:i" }}</dd>
+                </div>
+
+                <div class="detalle-row">
+                    <dt>Última actualización</dt>
+                    <dd>{{ documento.fecha_actualizacion|date:"d/m/Y H:i" }}</dd>
+                </div>
+
+                <div class="detalle-row">
+                    <dt>Marcado para revisión</dt>
+                    <dd>
+                        {% if documento.marcado_para_revision %}
+                            <span class="badge badge-info">Sí</span>
+                        {% else %}
+                            <span class="badge badge-muted">No</span>
+                        {% endif %}
+                    </dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+
+    <!-- Previsualización del PDF -->
+    <div class="card" style="margin-top: 1.5rem;">
+        <div class="card-header">
+            <h2 class="card-title">Previsualización</h2>
+        </div>
+        <div class="card-body">
+            {% if documento.archivo %}
+                <div class="pdf-preview">
+                    <div class="pdf-frame-wrapper">
+                        <iframe
+                            src="{% url 'documentos:pdf' documento.pk %}"
+                            class="pdf-frame"
+                            style="width: 100%; height: 70vh; border: 1px solid #ccc; border-radius: 8px;">
+                        </iframe>
+                    </div>
+                    <p class="pdf-help-text">
+                        Si el PDF no se carga correctamente, puedes usar el botón “Abrir PDF en nueva pestaña” de arriba.
+                    </p>
+                </div>
+            {% else %}
+                <p>Este documento no tiene archivo asociado.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
 {% endblock %}

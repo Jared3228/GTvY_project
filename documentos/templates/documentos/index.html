@@ -1,34 +1,149 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/documentos.css' %}">
+{% endblock %}
 
 {% block content %}
-<h1>Documentos</h1>
+<div class="page-container">
 
-<a href="{% url 'documentos:crear' %}">Subir nuevo documento</a>
+    <!-- Header / título + acción -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Documentos</h1>
+            <p class="page-subtitle">
+                Gestión de documentos PDF del departamento. Puedes buscar, filtrar y ordenar la lista.
+            </p>
+        </div>
+        <div class="page-actions">
+            <a href="{% url 'documentos:crear' %}" class="btn-primary">
+                + Subir nuevo documento
+            </a>
+        </div>
+    </div>
 
-<table>
-    <thead>
-        <tr>
-            <th>Título</th>
-            <th>Descripción</th>
-            <th>Fecha</th>
-            <th>Ver</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for doc in documentos %}
-        <tr>
-            <td>{{ doc.nombre }}</td>
-            <td>{{ doc.descripcion|default:"-" }}</td>
-            <td>{{ doc.fecha_creacion|date:"d/m/Y H:i" }}</td>
-            <td>
-                <a href="{% url 'documentos:detalle' doc.pk %}">Ver</a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4">No hay documentos aún.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <!-- Filtros y búsqueda -->
+    <section class="filtros-documentos card">
+        <form method="get" class="filtros-form">
+            <div class="filtros-grid">
+                <div class="filtro-item">
+                    <label for="q">Buscar</label>
+                    <input
+                        type="text"
+                        id="q"
+                        name="q"
+                        placeholder="Nombre del documento o creador"
+                        value="{{ query_actual }}"
+                    >
+                </div>
+
+                <div class="filtro-item">
+                    <label for="orden">Ordenar por</label>
+                    <select id="orden" name="orden">
+                        <option value="recientes"
+                            {% if orden_actual == 'recientes' %}selected{% endif %}>
+                            Más recientes primero
+                        </option>
+                        <option value="fecha_asc"
+                            {% if orden_actual == 'fecha_asc' %}selected{% endif %}>
+                            Fecha ascendente
+                        </option>
+                        <option value="fecha_desc"
+                            {% if orden_actual == 'fecha_desc' %}selected{% endif %}>
+                            Fecha descendente
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Si después agregas filtro por estado, aquí va otro select -->
+
+                <div class="filtro-actions">
+                    <button type="submit" class="btn-buscar">Aplicar filtros</button>
+                    <a href="{% url 'documentos:lista' %}" class="btn-limpiar">Limpiar</a>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <!-- Tabla de documentos -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Listado de documentos</h2>
+        </div>
+        <div class="card-body">
+            <table class="table documentos-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Fecha de creación</th>
+                        <th class="col-acciones">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doc in documentos %}
+                    <tr>
+                        <td class="col-nombre">
+                            {{ doc.nombre }}
+                        </td>
+                        <td class="col-descripcion">
+                            {{ doc.descripcion|default:"-" }}
+                        </td>
+                        <td class="col-estado">
+                            <!-- Usa el display de las choices -->
+                            <span class="badge estado-{{ doc.estado }}">
+                                {{ doc.get_estado_display }}
+                            </span>
+                        </td>
+                        <td class="col-fecha">
+                            {{ doc.fecha_creacion|date:"d/m/Y H:i" }}
+                        </td>
+                        <td class="col-acciones">
+                            <a href="{% url 'documentos:detalle' doc.pk %}" class="btn-link">
+                                Ver
+                            </a>
+                            {% if doc.archivo %}
+                                ·
+                                <a href="{{ doc.archivo.url }}" target="_blank" rel="noopener" class="btn-link">
+                                    Descargar
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="texto-vacio">
+                            No hay documentos que coincidan con los filtros actuales.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Paginación -->
+            {% if is_paginated %}
+                <div class="paginacion">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}&orden={{ orden_actual }}&q={{ query_actual }}" class="page-link">
+                            « Anterior
+                        </a>
+                    {% endif %}
+
+                    <span class="page-info">
+                        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}&orden={{ orden_actual }}&q={{ query_actual }}" class="page-link">
+                            Siguiente »
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
 {% endblock %}

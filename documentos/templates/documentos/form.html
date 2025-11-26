@@ -1,13 +1,58 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/documentos.css' %}">
+{% endblock %}
 
 {% block content %}
-<h1>Subir documento PDF</h1>
+<div class="page-container">
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar</button>
-</form>
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Subir documento PDF</h1>
+            <p class="page-subtitle">
+                Completa la información y adjunta el archivo PDF para registrarlo en el sistema.
+            </p>
+        </div>
+        <div class="page-actions">
+            <a href="{% url 'documentos:lista' %}" class="btn-limpiar">
+                ← Volver al listado
+            </a>
+        </div>
+    </div>
 
-<a href="{% url 'documentos:lista' %}">Volver a la lista</a>
+    <div class="card">
+        <div class="card-body">
+
+            <form method="post" enctype="multipart/form-data" class="form-documento">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <!-- Si más adelante quieres maquetar campo por campo, los ponemos a mano.
+                     Por ahora dejamos as_p para no pelear con el tiempo. -->
+
+                <div class="form-fields">
+                    {{ form.as_p }}
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        Guardar documento
+                    </button>
+                    <a href="{% url 'documentos:lista' %}" class="btn-limpiar">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>
 {% endblock %}

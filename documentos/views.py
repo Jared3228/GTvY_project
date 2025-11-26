@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404
+from django.db.models import Q  # 👈 IMPORTANTE
 
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.clickjacking import xframe_options_exempt
@@ -15,7 +16,39 @@ class DocumentoListView(LoginRequiredMixin, ListView):
     model = Documento
     template_name = 'documentos/index.html'
     context_object_name = 'documentos'
-    # usamos el ordering del modelo, no hace falta más
+    paginate_by = 20  # opcional, pero queda más "pro"
+
+    def get_queryset(self):
+        qs = Documento.objects.all()
+
+        # 🔎 Búsqueda por nombre del archivo o nombre del creador
+        q = self.request.GET.get('q', '').strip()
+        if q:
+            qs = qs.filter(
+                Q(nombre__icontains=q) |
+                Q(creado_por__username__icontains=q) |
+                Q(creado_por__first_name__icontains=q) |
+                Q(creado_por__last_name__icontains=q)
+            )
+
+        # 📌 Orden: recientes (default), fecha asc, fecha desc
+        orden = self.request.GET.get('orden', 'recientes')
+
+        if orden == 'fecha_asc':
+            qs = qs.order_by('fecha_creacion')
+        elif orden == 'fecha_desc':
+            qs = qs.order_by('-fecha_creacion')
+        else:
+            # "recientes" → usamos el ordering por defecto del modelo
+            qs = qs.order_by('-fecha_creacion')
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['orden_actual'] = self.request.GET.get('orden', 'recientes')
+        ctx['query_actual'] = self.request.GET.get('q', '').strip()
+        return ctx
 
 
 class DocumentoCreateView(LoginRequiredMixin, CreateView):
