@@ -29,6 +29,7 @@ urlpatterns = [
     path('documentos/', include('documentos.urls', namespace='documentos')),
     path('reportes/', include('reportes.urls', namespace='reportes')),
     path('convenios/', include('convenios.urls', namespace='convenios')),
+    path('pendientes/', include('pendientes.urls', namespace='pendientes')),
 
     # Login/Logout
     path('accounts/', include('accounts.urls')),

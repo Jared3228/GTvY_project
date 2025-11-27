@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<h2>Reportes</h2>
+<h2>Constancias</h2>
 
 <div class="layout-reportes">
 
@@ -47,7 +47,7 @@
 
     <!-- Panel izquierdo: generadores -->
     <div class="panel-generadores">
-        <h3>Generar reportes</h3>
+        <h3>Generar constancias</h3>
         <a href="{% url 'reportes:constancia_residencias' %}">Constancia de Residencias</a>
         <a href="{% url 'reportes:constancia_servicio' %}">Constancia de Servicio Social</a>
         <a href="{% url 'reportes:constancia_practicas' %}">Constancia de Prácticas Profesionales</a>
@@ -55,7 +55,7 @@
 
     <!-- Panel derecho: lista de reportes -->
     <div class="panel-lista">
-        <h2 style="padding: 16px 24px 0;">Reportes generados</h2>
+        <h2 style="padding: 16px 24px 0;">Constancias generados</h2>
 
         {% if reportes %}
             <table class="tabla-reportes">
@@ -96,7 +96,7 @@
                 </tbody>
             </table>
         {% else %}
-            <p style="padding: 16px 24px;">No hay reportes generados todavía.</p>
+            <p style="padding: 16px 24px;">No hay constancias generados todavía.</p>
         {% endif %}
     </div>
 

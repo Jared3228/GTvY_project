@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Mis pendientes | Sistema GTyV{% endblock %}
+
+{% block extra_css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/pendientes.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <header class="page-header">
+        <div>
+            <h1 class="page-title">Mis pendientes</h1>
+            <p class="page-subtitle">
+                Pendientes que te han sido asignados y aún no se marcan como completados.
+            </p>
+        </div>
+    </header>
+
+    <section class="card">
+        <div class="card-header">
+            <h2 class="card-title">Listado</h2>
+        </div>
+
+        {% if pendientes %}
+            <ul class="lista-pendientes">
+                {% for p in pendientes %}
+                    <li class="pendiente-item">
+                        <div class="pendiente-main">
+                            <div>
+                                <h3 class="pendiente-titulo">{{ p.titulo }}</h3>
+                                {% if p.descripcion %}
+                                    <p class="pendiente-descripcion">
+                                        {{ p.descripcion|truncatechars:160 }}
+                                    </p>
+                                {% endif %}
+                            </div>
+                            <div class="pendiente-meta">
+                                {% if p.fecha_limite %}
+                                    <span class="pendiente-fecha">
+                                        Vence: {{ p.fecha_limite|date:"d/m/Y" }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="pendiente-actions">
+                            <a href="{% url 'pendientes:marcar_completado' p.pk %}"
+                               class="btn-primary btn-sm">
+                                Marcar como completado
+                            </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="texto-vacio">
+                No tienes pendientes asignados por el momento. 🎉
+            </p>
+        {% endif %}
+    </section>
+
+</div>
+{% endblock %}

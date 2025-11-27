@@ -1,0 +1,306 @@
+/* ===== Página de pendientes ===== */
+
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header (título + acciones) */
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.page-title {
+    font-size: 1.75rem;
+    margin: 0;
+}
+
+.page-subtitle {
+    margin: 0.25rem 0 0;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.page-actions a {
+    font-size: 0.9rem;
+}
+
+/* Cards generales */
+.card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    margin-bottom: 0.75rem;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* ===== Tabla de pendientes (vista jefe) ===== */
+
+.tabla-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.pendientes-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.9rem;
+}
+
+.pendientes-table thead tr {
+    border-bottom: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+}
+
+.pendientes-table th,
+.pendientes-table td {
+    padding: 0.7rem 0.9rem;
+    text-align: left;
+}
+
+.pendientes-table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+.pendientes-table tbody tr:hover {
+    background-color: #eef2ff;
+}
+
+.pendientes-table .col-acciones {
+    white-space: nowrap;
+}
+
+/* Texto vacío / muted */
+.texto-vacio {
+    text-align: center;
+    padding: 1rem 0;
+    color: #6b7280;
+}
+
+.texto-mutedo {
+    color: #9ca3af;
+    font-size: 0.8rem;
+}
+
+/* ===== Badges de estado ===== */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-pendiente {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.badge-completado {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+/* ===== Formulario de crear pendiente ===== */
+
+.form-pendiente .form-fields p {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-width: 600px;
+}
+
+.form-pendiente label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-pendiente input[type="text"],
+.form-pendiente textarea,
+.form-pendiente select,
+.form-pendiente input[type="date"] {
+    width: 100%;
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 0.9rem;
+}
+
+.form-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* ===== Lista de "Mis pendientes" ===== */
+
+.lista-pendientes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.pendiente-item {
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.pendiente-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.pendiente-titulo {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.pendiente-descripcion {
+    margin: 0.25rem 0 0;
+    font-size: 0.9rem;
+    color: #4b5563;
+}
+
+.pendiente-meta {
+    font-size: 0.8rem;
+    color: #6b7280;
+    white-space: nowrap;
+}
+
+.pendiente-fecha {
+    font-weight: 500;
+}
+
+.pendiente-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* ===== Botones reutilizables ===== */
+
+.btn-buscar,
+.btn-limpiar {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    font-family: var(--font-family);
+}
+
+/* Botón primario reutilizable */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.55rem 1.1rem;
+    min-height: 2.3rem;
+
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #ffffff;
+
+    font-weight: 600;
+    font-size: 0.9rem;
+
+    border-radius: 10px;
+    border: none;
+
+    box-shadow: 0 3px 10px rgba(79, 70, 229, 0.25);
+    cursor: pointer;
+    text-decoration: none;
+
+    transition: all 0.15s ease-out;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+    box-shadow: 0 5px 14px rgba(67, 56, 202, 0.35);
+    transform: translateY(-2px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(67, 56, 202, 0.25);
+}
+
+/* Variante pequeña para “Mis pendientes” */
+.btn-sm {
+    padding: 0.35rem 0.85rem;
+    font-size: 0.8rem;
+    min-height: 2rem;
+}
+
+/* Botón secundario */
+.btn-limpiar {
+    background-color: transparent;
+    color: #6b7280;
+    border: 1px solid transparent;
+}
+
+.btn-limpiar:hover {
+    color: #111827;
+    background-color: #f3f4f6;
+}
+
+/* Links de acción */
+.btn-link {
+    text-decoration: none;
+    color: #4f46e5;
+    font-weight: 500;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .pendiente-main {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .pendiente-meta {
+        white-space: normal;
+    }
+}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Pendientes creados por mí | Sistema GTyV{% endblock %}
+
+{% block extra_css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/pendientes.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <header class="page-header">
+        <div>
+            <h1 class="page-title">Pendientes creados por mí</h1>
+            <p class="page-subtitle">
+                Aquí puedes ver todos los pendientes que has asignado y su estado actual.
+            </p>
+        </div>
+        <div class="page-actions">
+            <a href="{% url 'pendientes:crear' %}" class="btn-primary">
+                Crear nuevo pendiente
+            </a>
+        </div>
+    </header>
+
+    <section class="card">
+        <div class="card-header">
+            <h2 class="card-title">Listado de pendientes</h2>
+        </div>
+
+        {% if pendientes %}
+            <div class="tabla-wrapper">
+                <table class="pendientes-table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Asignado a</th>
+                            <th>Fecha límite</th>
+                            <th>Estado</th>
+                            <th class="col-acciones">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in pendientes %}
+                            <tr>
+                                <td>{{ p.titulo }}</td>
+                                <td>{{ p.asignado_a }}</td>
+                                <td>
+                                    {% if p.fecha_limite %}
+                                        {{ p.fecha_limite|date:"d/m/Y" }}
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if p.completado %}
+                                        <span class="badge badge-completado">Completado</span>
+                                    {% else %}
+                                        <span class="badge badge-pendiente">Pendiente</span>
+                                    {% endif %}
+                                </td>
+                                <td class="col-acciones">
+                                    {% if not p.completado %}
+                                        <a href="{% url 'pendientes:marcar_completado' p.pk %}"
+                                           class="btn-link">
+                                            Marcar como completado
+                                        </a>
+                                    {% else %}
+                                        <span class="texto-mutedo">—</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="texto-vacio">
+                No has creado pendientes todavía.
+            </p>
+        {% endif %}
+    </section>
+
+</div>
+{% endblock %}

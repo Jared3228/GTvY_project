@@ -1,13 +1,136 @@
 {% extends "base.html" %}
+{% load roles_tags %}
 
-{% block title %}Dashboard | Sistema GTyV{% endblock %}
+{% block title %}Inicio | Sistema GTyV{% endblock %}
+
+{% block extra_css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
 
 {% block content %}
-    <header class="top-bar">
-        <h1>Bienvenido, {{ user.username }}</h1>
+<div class="home-wrapper">
+
+    <!-- Encabezado principal -->
+    <header class="home-header">
+        <div class="home-header-text">
+            <p class="home-greeting">Hola, {{ request.user.first_name|default:request.user.username }}</p>
+            <h1 class="home-title">Bienvenido al sistema GTyV</h1>
+            <p class="home-subtitle">
+                Aquí puedes ver un resumen rápido de tu perfil y tus pendientes activos.
+            </p>
+        </div>
     </header>
 
-    <div class="content-area">
-        <p>Contenido del dashboard...</p>
-    </div>
+    <!-- Perfil del usuario (más ancho, con más datos) -->
+    <section class="home-user-section">
+        <div class="home-user-card home-user-card-wide">
+            <h2 class="home-panel-title">Perfil</h2>
+
+            <div class="home-user-grid">
+                <div class="home-user-field">
+                    <span class="home-user-label">Nombre completo</span>
+                    <span class="home-user-value">
+                        {{ request.user.get_full_name|default:request.user.username }}
+                    </span>
+                </div>
+                <div class="home-user-field">
+                    <span class="home-user-label">Nombre de usuario</span>
+                    <span class="home-user-value">
+                        {{ request.user.username }}
+                    </span>
+                </div>
+                <div class="home-user-field">
+                    <span class="home-user-label">Correo</span>
+                    <span class="home-user-value">
+                        {{ request.user.email|default:"Sin correo registrado" }}
+                    </span>
+                </div>
+                <div class="home-user-field">
+                    <span class="home-user-label">Rol</span>
+                    <span class="home-user-value">
+                        {% if request.user|es_jefe %}
+                            Jefe
+                        {% else %}
+                            Usuario
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="home-user-field">
+                    <span class="home-user-label">Último inicio de sesión</span>
+                    <span class="home-user-value">
+                        {% if request.user.last_login %}
+                            {{ request.user.last_login|date:"d/m/Y H:i" }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tarjetas resumen (sin "consejo rápido" ni accesos a otras apps) -->
+    <section class="home-cards">
+        <article class="home-card">
+            <h2 class="home-card-title">Pendientes activos</h2>
+            <p class="home-card-number">{{ mis_pendientes|length }}</p>
+            <p class="home-card-caption">Asignados a ti sin completar.</p>
+        </article>
+
+        <article class="home-card">
+            <h2 class="home-card-title">Resumen</h2>
+            <p class="home-card-text">
+                Revisa tus pendientes y marca como completados los que ya terminaste.
+            </p>
+        </article>
+    </section>
+
+    <!-- Mis pendientes (con "ver todos" integrado aquí) -->
+    <section class="home-main-grid">
+        <div class="home-panel">
+            <div class="home-panel-header">
+                <h2 class="home-panel-title">Mis pendientes</h2>
+                {% if mis_pendientes %}
+                    <a href="{% url 'pendientes:mis_pendientes' %}" class="home-link-small">
+                        Ver todos mis pendientes
+                    </a>
+                {% endif %}
+            </div>
+
+            {% if mis_pendientes %}
+                <ul class="home-tasks-list">
+                    {% for p in mis_pendientes %}
+                        <li class="home-task-item">
+                            <div class="home-task-main">
+                                <span class="home-task-title">{{ p.titulo }}</span>
+                                {% if p.fecha_limite %}
+                                    <span class="home-task-date">
+                                        Vence: {{ p.fecha_limite|date:"d/m/Y" }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                            {% if p.descripcion %}
+                                <p class="home-task-desc">
+                                    {{ p.descripcion|truncatechars:120 }}
+                                </p>
+                            {% endif %}
+                            <div class="home-task-actions">
+                                <a href="{% url 'pendientes:marcar_completado' p.pk %}"
+                                   class="home-task-button">
+                                    Marcar como completado
+                                </a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="home-empty-text">
+                    No tienes pendientes activos. 🎉
+                </p>
+            {% endif %}
+        </div>
+    </section>
+
+</div>
 {% endblock %}

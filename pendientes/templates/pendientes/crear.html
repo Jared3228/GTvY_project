@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Crear pendiente | Sistema GTyV{% endblock %}
+
+{% block extra_css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/pendientes.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <header class="page-header">
+        <div>
+            <h1 class="page-title">Crear pendiente</h1>
+            <p class="page-subtitle">
+                Asigna un nuevo pendiente a un usuario o a un rol completo.
+            </p>
+        </div>
+        <div class="page-actions">
+            <a href="{% url 'pendientes:lista_jefe' %}" class="btn-link">
+                Volver a pendientes creados
+            </a>
+        </div>
+    </header>
+
+    <section class="card">
+        <div class="card-header">
+            <h2 class="card-title">Datos del pendiente</h2>
+        </div>
+
+        <form method="post" class="form-pendiente">
+            {% csrf_token %}
+            <div class="form-fields">
+                {{ form.as_p }}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Guardar pendiente</button>
+                <a href="{% url 'pendientes:lista_jefe' %}" class="btn-limpiar">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </section>
+
+</div>
+{% endblock %}

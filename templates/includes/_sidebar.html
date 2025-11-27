@@ -1,3 +1,6 @@
+{% load static %}
+{% load roles_tags %}
+
 <aside class="sidebar">
     <div class="sidebar-header">
         <div class="logo-placeholder">
@@ -33,13 +36,23 @@
                 </a>
             </li>
 
-            <!-- REPORTES -->
+            <!-- CONSTANCIAS (antes reportes) -->
             <li class="nav-item {% if '/reportes' in request.path %}active{% endif %}">
                 <a href="{% url 'reportes:index' %}" class="nav-link">
                     <ion-icon name="bar-chart-outline"></ion-icon>
-                    <span class="link-text">Reportes</span>
+                    <span class="link-text">Constancias</span>
                 </a>
             </li>
+
+            <!-- Pendientes (solo disponible para el rol jefe)-->
+            {% if request.user|es_jefe %}
+            <li class="nav-item">
+                <a href="{% url 'pendientes:lista_jefe' %}" class="nav-link">
+                    <ion-icon name="clipboard-outline"></ion-icon>
+                    <span class="link-text">Pendientes</span>
+                </a>
+            </li>
+            {% endif %}
         </ul>
 
         <div class="nav-spacer"></div>

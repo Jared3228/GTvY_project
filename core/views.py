@@ -1,6 +1,16 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from pendientes.models import Pendiente
 
-# Create your views here.
-
+@login_required
 def dashboard(request):
-    return render(request, 'core/dashboard.html')
+    user = request.user
+
+    mis_pendientes = Pendiente.objects.filter(
+        asignado_a=user,
+        completado=False
+    ).order_by('fecha_limite', 'fecha_creacion')[:5]
+
+    return render(request, 'core/dashboard.html', {
+        'mis_pendientes': mis_pendientes,
+    })
