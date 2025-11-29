@@ -15,8 +15,6 @@
     <form method="post" class="form">
         {% csrf_token %}
 
-        <!-- Render form fields manually or loop if needed, but as_p is requested to be kept. 
-             We can wrap it to ensure styling applies to p tags inside. -->
         <div class="form-fields">
             {{ form.as_p }}
         </div>

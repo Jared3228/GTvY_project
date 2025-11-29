@@ -13,7 +13,9 @@ from xhtml2pdf import pisa
 from .forms import DatosBasicosReporteForm
 from .models import Reporte
 
-
+#Podria ser una buena idea, dependiendo de la dificultad y el tiempo, agregar un sistema de carga masiva
+#con una plantilla de excel
+#Tambien es necesario que este el atributo carrera
 def render_to_pdf(template_src, context_dict=None):
     if context_dict is None:
         context_dict = {}

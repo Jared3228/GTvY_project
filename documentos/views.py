@@ -11,7 +11,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from .models import Documento
 from .forms import DocumentoForm, DocumentoRevisionForm
 
-
+#Agregar una opcion para el rol Jefe para cambiar estado
 class DocumentoListView(LoginRequiredMixin, ListView):
     model = Documento
     template_name = 'documentos/index.html'

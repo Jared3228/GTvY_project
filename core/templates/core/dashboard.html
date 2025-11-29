@@ -49,11 +49,13 @@
                 <div class="home-user-field">
                     <span class="home-user-label">Rol</span>
                     <span class="home-user-value">
-                        {% if request.user|es_jefe %}
-                            Jefe
-                        {% else %}
-                            Usuario
-                        {% endif %}
+                        {% with grupo=request.user.groups.first %}
+                            {% if grupo %}
+                                {{ grupo.name }}
+                            {% else %}
+                                Sin rol asignado
+                            {% endif %}
+                        {% endwith %}
                     </span>
                 </div>
                 <div class="home-user-field">

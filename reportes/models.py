@@ -21,7 +21,7 @@ class Reporte(models.Model):
         null=True, blank=True,
         related_name='reportes_creados'
     )
-
+    #Falta agregar la opcion para que el rol Jefe pueda revisar y cambiar el estado.
     # Para el flujo futuro de revisión
     ESTADO_CHOICES = [
         ('generado', 'Generado'),
@@ -34,8 +34,8 @@ class Reporte(models.Model):
         default='generado'
     )
 
-    # Archivo generado (PDF/Word/lo que sea). No lo guardes como BLOB en la DB,
-    # usa FileField para guardar en /media y solo guardar la ruta.
+    # Archivo generado (PDF/Word/lo que sea).
+    # Se usa FileField para guardar en /media y solo guardar la ruta.
     archivo = models.FileField(
         upload_to='reportes/',
         null=True, blank=True
