@@ -43,7 +43,7 @@
                     </thead>
                     <tbody>
                         {% for p in pendientes %}
-                            <tr>
+                            <tr class="{% if p.esta_atrasado %}pendiente-atrasado{% endif %}">
                                 <td>{{ p.titulo }}</td>
                                 <td>{{ p.asignado_a }}</td>
                                 <td>

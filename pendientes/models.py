@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 User = settings.AUTH_USER_MODEL
 
@@ -22,5 +23,9 @@ class Pendiente(models.Model):
     fecha_limite = models.DateField(null=True, blank=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.titulo
+    def esta_atrasado(self):
+        return True
+
+        hoy = timezone.localdate()
+        # Atrasado si ya pasó la fecha límite y no está completado
+        return (not self.completado) and (self.fecha_limite < hoy)

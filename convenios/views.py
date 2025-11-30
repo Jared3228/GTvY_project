@@ -1,4 +1,6 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -8,8 +10,19 @@ from .models import Convenio
 
 from convenios.forms import ConvenioForm
 
-from .models import Convenio
+def es_jefe(user):
+    return user.is_authenticated and user.groups.filter(name='Jefe').exists()
 
+class SoloJefeMixin(UserPassesTestMixin):
+    """Restringe el acceso a usuarios que pertenezcan al grupo 'Jefe'."""
+
+    def test_func(self):
+        return es_jefe(self.request.user)
+
+    def handle_no_permission(self):
+        messages.error(self.request, "No tienes permisos para realizar esta acción.")
+        return redirect("convenios:index")
+    
 class ConvenioListView(LoginRequiredMixin, ListView):
     model = Convenio
     template_name = 'convenios/index.html'  # o como lo tengas
@@ -48,7 +61,7 @@ class ConvenioDetailView(LoginRequiredMixin, DetailView):
     template_name = 'convenios/detalle.html'
     context_object_name = 'convenio'
 
-class ConvenioCreateView(LoginRequiredMixin, CreateView):
+class ConvenioCreateView(LoginRequiredMixin, CreateView, SoloJefeMixin):
     model = Convenio
     form_class = ConvenioForm
     template_name = 'convenios/formulario.html'
@@ -59,7 +72,7 @@ class ConvenioCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ConvenioUpdateView(LoginRequiredMixin, UpdateView):
+class ConvenioUpdateView(LoginRequiredMixin, UpdateView, SoloJefeMixin):
     model = Convenio
     form_class = ConvenioForm
     template_name = 'convenios/formulario.html'
@@ -68,7 +81,7 @@ class ConvenioUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('convenios:detalle', kwargs={'pk': self.object.pk})
 
 
-class ConvenioToggleActivoView(LoginRequiredMixin, View):
+class ConvenioToggleActivoView(LoginRequiredMixin, View, SoloJefeMixin):
     def post(self, request, pk):
         convenio = get_object_or_404(Convenio, pk=pk)
 
@@ -80,3 +93,4 @@ class ConvenioToggleActivoView(LoginRequiredMixin, View):
         convenio.save()
 
         return redirect('convenios:detalle', pk=pk)
+

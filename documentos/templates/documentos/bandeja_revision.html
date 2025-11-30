@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/documentos.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Bandeja de revisión</h1>
+            <p class="page-subtitle">
+                Documentos marcados para revisión pendientes de aprobación o rechazo.
+            </p>
+        </div>
+        <div class="page-actions">
+            <a href="{% url 'core:dashboard' %}" class="btn-limpiar">
+                ← Volver al inicio
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            {% if documentos %}
+                <table class="tabla-documentos">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Creado por</th>
+                            <th>Fecha creación</th>
+                            <th>Estado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doc in documentos %}
+                            <tr>
+                                <td>{{ doc.nombre }}</td>
+                                <td>
+                                    {% if doc.creado_por %}
+                                        {{ doc.creado_por.get_full_name|default:doc.creado_por.username }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ doc.fecha_creacion|date:"d/m/Y H:i" }}</td>
+                                <td>
+                                    <span class="badge estado-{{ doc.estado }}">
+                                        {{ doc.get_estado_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{% url 'documentos:revision_detalle' doc.pk %}"
+                                       class="btn-primary">
+                                        Ver / revisar
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No hay documentos pendientes de revisión. 🎉</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

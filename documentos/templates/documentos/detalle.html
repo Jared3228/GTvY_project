@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% load roles_tags %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/documentos.css' %}">
 {% endblock %}
@@ -82,6 +83,45 @@
                     </dd>
                 </div>
             </dl>
+            {% if form and request.user|es_jefe %}
+
+            <div class="revision-card">
+                <h2 class="revision-card-title">Revisión del documento</h2>
+                <p class="revision-card-subtitle">
+                    Cambia el estado del documento y, si aplica, añade comentarios de revisión.
+                </p>
+
+                <form method="post" class="revision-form">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+
+                    <div class="revision-grid">
+                        <div class="revision-field">
+                            <label for="id_estado">Estado</label>
+                            {{ form.estado }}
+                        </div>
+
+                        <div class="revision-field">
+                            <label for="id_marcado_para_revision">Marcar para revisión</label>
+                            {{ form.marcado_para_revision }}
+                        </div>
+                    </div>
+
+                    {% if form.comentarios %}
+                    <div class="revision-field-full">
+                        <label for="id_comentarios">Comentarios</label>
+                        {{ form.comentarios }}
+                    </div>
+                    {% endif %}
+
+                    <button type="submit" class="btn-primary revision-submit">
+                        Guardar revisión
+                    </button>
+                </form>
+            </div>
+
+            {% endif %}
+
         </div>
     </div>
 

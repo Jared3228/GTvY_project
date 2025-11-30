@@ -25,9 +25,9 @@
         </div>
 
         {% if pendientes %}
-            <ul class="lista-pendientes">
+            <ul class="lista-pendientes ">
                 {% for p in pendientes %}
-                    <li class="pendiente-item">
+                    <li class="pendiente-item {% if p.esta_atrasado %}pendiente-atrasado{% endif %}">
                         <div class="pendiente-main">
                             <div>
                                 <h3 class="pendiente-titulo">{{ p.titulo }}</h3>

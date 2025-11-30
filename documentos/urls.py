@@ -22,5 +22,5 @@ urlpatterns = [
 
     # Revisión jefe
     path('revision/', BandejaRevisionView.as_view(), name='bandeja_revision'),
-    path('revision/<int:pk>/', DocumentoRevisionUpdateView.as_view(), name='revisar'),
+    path('revision/<int:pk>/', DocumentoRevisionUpdateView.as_view(), name='revision_detalle'),
 ]

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load roles_tags %}
 
-{% block title %}Inicio | Sistema GTyV{% endblock %}
+{% block title %}Inicio{% endblock %}
 
 {% block extra_css %}
     {% load static %}
@@ -22,7 +22,7 @@
         </div>
     </header>
 
-    <!-- Perfil del usuario (más ancho, con más datos) -->
+    <!-- Perfil del usuario -->
     <section class="home-user-section">
         <div class="home-user-card home-user-card-wide">
             <h2 class="home-panel-title">Perfil</h2>
@@ -72,7 +72,6 @@
         </div>
     </section>
 
-    <!-- Tarjetas resumen (sin "consejo rápido" ni accesos a otras apps) -->
     <section class="home-cards">
         <article class="home-card">
             <h2 class="home-card-title">Pendientes activos</h2>
@@ -86,6 +85,23 @@
                 Revisa tus pendientes y marca como completados los que ya terminaste.
             </p>
         </article>
+        {% if request.user|es_jefe %}
+        <article class="home-card">
+            <h2 class="home-card-title">Documentos en revisión</h2>
+            <p class="home-card-number">
+                {{ documentos_en_revision_count }}
+            </p>
+            <p class="home-card-caption">
+                Documentos marcados para revisión pendientes de aprobación o rechazo.
+            </p>
+
+            {% if documentos_en_revision_count > 0 %}
+                <a href="{% url 'documentos:bandeja_revision' %}" class="home-link-small">
+                    Ver documentos a revisar
+                </a>
+            {% endif %}
+        </article>
+        {% endif %}
     </section>
 
     <!-- Mis pendientes (con "ver todos" integrado aquí) -->

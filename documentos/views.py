@@ -104,7 +104,8 @@ class DocumentoRevisionUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = 'documentos.puede_revisar_documentos'
     model = Documento
     form_class = DocumentoRevisionForm
-    template_name = 'documentos/revision_detalle.html'
+    template_name = 'documentos/detalle.html' 
+    context_object_name = 'documento'
     success_url = reverse_lazy('documentos:bandeja_revision')
 
     def form_valid(self, form):
@@ -113,6 +114,11 @@ class DocumentoRevisionUpdateView(PermissionRequiredMixin, UpdateView):
             documento.marcado_para_revision = False
         documento.save()
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['modo_revision'] = True  # flag para el template (si lo quieres usar)
+        return ctx
 
 
 @login_required

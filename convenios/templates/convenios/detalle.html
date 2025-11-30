@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load roles_tags %}
+
 {% block content %}
 <div class="detalle-convenio">
     <div class="detalle-header">
@@ -49,26 +51,27 @@
         </div>
 
         <div class="detalle-acciones">
-            <a href="{% url 'convenios:editar' convenio.pk %}" class="btn btn-secondary">
-                <ion-icon name="create-outline"></ion-icon>
-                Editar
-            </a>
+            {% if request.user|es_jefe %}
+                <a href="{% url 'convenios:editar' convenio.pk %}" class="btn btn-secondary">
+                    <ion-icon name="create-outline"></ion-icon>
+                    Editar
+                </a>
 
-            <form action="{% url 'convenios:toggle_activo' convenio.pk %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                {% if convenio.activo %}
-                <button type="submit" class="btn btn-danger">
-                    <ion-icon name="ban-outline"></ion-icon>
-                    Deshabilitar
-                </button>
-                {% else %}
-                <button type="submit" class="btn btn-success">
-                    <ion-icon name="checkmark-circle-outline"></ion-icon>
-                    Reactivar
-                </button>
-                {% endif %}
-            </form>
-
+                <form action="{% url 'convenios:toggle_activo' convenio.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    {% if convenio.activo %}
+                    <button type="submit" class="btn btn-danger">
+                        <ion-icon name="ban-outline"></ion-icon>
+                        Deshabilitar
+                    </button>
+                    {% else %}
+                    <button type="submit" class="btn btn-success">
+                        <ion-icon name="checkmark-circle-outline"></ion-icon>
+                        Reactivar
+                    </button>
+                    {% endif %}
+                </form>
+            {% endif %}
             <a href="{% url 'convenios:index' %}" class="btn btn-light">
                 <ion-icon name="arrow-back-outline"></ion-icon>
                 Volver a la lista
