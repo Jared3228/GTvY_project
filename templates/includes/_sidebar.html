@@ -7,7 +7,7 @@
             <span class="logo-icon">
                 <ion-icon name="cube-outline"></ion-icon>
             </span>
-            <span class="logo-text">GTYV Dashboard</span>
+            <span class="logo-text">GTYV</span>
         </div>
     </div>
 
@@ -37,7 +37,7 @@
             </li>
 
             <!-- CONSTANCIAS (antes reportes) -->
-            <li class="nav-item {% if '/reportes' in request.path %}active{% endif %}">
+            <li class="nav-item {% if '/constancias' in request.path %}active{% endif %}">
                 <a href="{% url 'reportes:index' %}" class="nav-link">
                     <ion-icon name="bar-chart-outline"></ion-icon>
                     <span class="link-text">Constancias</span>
@@ -46,7 +46,7 @@
 
             <!-- Pendientes (solo disponible para el rol jefe)-->
             {% if request.user|es_jefe %}
-            <li class="nav-item">
+            <li class="nav-item {% if '/pendientes' in request.path %}active{% endif %}">
                 <a href="{% url 'pendientes:lista_jefe' %}" class="nav-link">
                     <ion-icon name="clipboard-outline"></ion-icon>
                     <span class="link-text">Pendientes</span>

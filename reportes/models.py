@@ -2,13 +2,36 @@
 from django.conf import settings
 from django.db import models
 
+CARRERA_CHOICES = [
+    ('ING_BIOQUIMICA', 'Ingeniería Bioquímica'),
+    ('ING_SEMICONDUCTORES', 'Ingeniería en Semiconductores'),
+    ('CONTADOR_PUBLICO', 'Contador Público'),
+    ('ING_ADMINISTRACION', 'Ingeniería en Administración'),
+    ('ING_DESARROLLO_APLICACIONES', 'Ingeniería en Desarrollo de Aplicaciones'),
+    ('ING_ELECTRICA', 'Ingeniería Eléctrica'),
+    ('ING_ELECTRONICA', 'Ingeniería Electrónica'),
+    ('ING_ENERGIAS_RENOVABLES', 'Ingeniería en Energías Renovables'),
+    ('ING_GESTION_EMPRESARIAL', 'Ingeniería en Gestión Empresarial'),
+    ('ING_INDUSTRIAL', 'Ingeniería Industrial'),
+    ('ING_LOGISTICA', 'Ingeniería en Logística'),
+    ('ING_MATERIALES', 'Ingeniería en Materiales'),
+    ('ING_MECATRONICA', 'Ingeniería Mecatrónica'),
+    ('ING_MECANICA', 'Ingeniería Mecánica'),
+    ('ING_QUIMICA', 'Ingeniería Química'),
+    ('ING_SISTEMAS_COMPUTACIONALES', 'Ingeniería en Sistemas Computacionales'),
+]
 class Reporte(models.Model):
     TIPO_CHOICES = [
         ('CONST_RES', 'Constancia de Residencias'),
         ('CONST_SERV', 'Constancia de Servicio Social'),
         ('CONST_PRA', 'Constancia de Prácticas Profesionales'),
     ]
-
+    
+    carrera = models.CharField(
+        max_length=60,
+        choices=CARRERA_CHOICES,
+    )
+    
     tipo = models.CharField(max_length=50, choices=TIPO_CHOICES)
     nombre_alumno = models.CharField(max_length=150)
     numero_control = models.CharField(max_length=20)

@@ -7,6 +7,7 @@
         body { font-family: DejaVu Sans, sans-serif; font-size: 12pt; }
         h1 { text-align: center; font-size: 16pt; margin-bottom: 40px; }
         p  { text-align: justify; line-height: 1.4; }
+        .firma { margin-top: 60px; text-align: center; }
         .footer { margin-top: 40px; font-size: 10pt; text-align: right; }
     </style>
 </head>
@@ -16,7 +17,8 @@
     <p>
         El Departamento de Gestión Tecnológica y Vinculación certifica que
         <strong>{{ nombre_alumno }}</strong>, con número de control
-        <strong>{{ numero_control }}</strong>, realizó prácticas profesionales
+        <strong>{{ numero_control }}</strong>, de la carrera <strong>{{ carrera }}</strong>, 
+        realizó prácticas profesionales
         en una empresa/organización vinculada con esta institución.
     </p>
 
@@ -24,7 +26,10 @@
         Para los efectos legales que haya lugar, se extiende la presente
         constancia en Mexicali, B.C., en fecha <strong>{{ fecha }}</strong>.
     </p>
-
+    <div class="firma">
+        _______________________________<br>
+        Jefa de Gestión Tecnológica y Vinculación
+    </div>
     <div class="footer">
         Generado automáticamente el {{ fecha_hoy }}
     </div>

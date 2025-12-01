@@ -27,6 +27,12 @@
             {{ form.numero_control }}
         </div>
 
+        <div class="form-group" style="margin-bottom: 16px;">
+            {{ form.carrera.label_tag }}
+            {{ form.carrera }}
+            {{ form.carrera.errors }}
+        </div>
+
         <div class="form-group" style="margin-bottom: 24px;">
             {{ form.fecha.label_tag }}
             {{ form.fecha }}

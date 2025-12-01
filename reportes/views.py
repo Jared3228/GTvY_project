@@ -90,24 +90,27 @@ def _generar_reporte_pdf(request, tipo, template_pdf, titulo_pagina):
         if form.is_valid():
             datos = form.cleaned_data
 
-            contexto_pdf = {
-                'nombre_alumno': datos['nombre_alumno'],
-                'numero_control': datos['numero_control'],
-                'fecha': datos['fecha'],
-                'fecha_hoy': timezone.now().date(),
-            }
 
-            pdf_bytes = render_to_pdf(template_pdf, contexto_pdf)
 
             reporte = Reporte(
                 tipo=tipo,
                 nombre_alumno=datos['nombre_alumno'],
                 numero_control=datos['numero_control'],
+                carrera=datos['carrera'],
                 fecha=datos['fecha'],
                 creado_por=request.user if request.user.is_authenticated else None,
                 estado='generado',
             )
 
+            contexto_pdf = {
+                'nombre_alumno': datos['nombre_alumno'],
+                'numero_control': datos['numero_control'],
+                'carrera': reporte.get_carrera_display(),
+                'fecha': datos['fecha'],
+                'fecha_hoy': timezone.now().date(),
+            }
+            
+            pdf_bytes = render_to_pdf(template_pdf, contexto_pdf)
             if pdf_bytes:
                 nombre_archivo = f'{tipo}_{datos["numero_control"]}_{timezone.now().strftime("%Y%m%d%H%M%S")}.pdf'
                 reporte.archivo.save(nombre_archivo, ContentFile(pdf_bytes), save=False)
