@@ -5,7 +5,7 @@ Incluye módulos para documentos, convenios, constancias, pendientes y control d
 
 ---
 
-## 🚀 Características principales
+##  Características principales
 
 - Gestión de usuarios con roles (Jefe / Trabajador)
 - Administración de convenios
@@ -16,7 +16,7 @@ Incluye módulos para documentos, convenios, constancias, pendientes y control d
 
 ---
 
-## 🛠️ Requisitos
+##  Requisitos
 
 Asegúrate de tener instalado:
 
@@ -26,9 +26,90 @@ Asegúrate de tener instalado:
 
 ---
 
-## 📦 Instalación
+## Instalación
 
 ### 1) Clonar el repositorio
 ```bash
-git clone https://github.com/tu_usuario/tu_repo.git
-cd tu_repo
+git clone https://github.com/Jared3228/GTvY_project
+cd GTvY_project
+```
+### 2) Crear entorno virtual
+
+Windows
+```bash
+venv\Scripts\activate
+```
+Linux/macOS
+```bash
+source venv/bin/activate
+```
+
+### 3) Instalar dependencias
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Base de datos
+
+Usando sqlite3:
+```bash
+python manage.py migrate
+```
+Para crear un super usuario:
+```bash
+python manage.py createsuperuser
+```
+
+---
+
+## Ejecutar el servidor
+```bash
+python manage.py runserver
+```
+El sistema estará disponible en:
+```bash
+http://127.0.0.1:8000/
+```
+
+---
+
+## Estructura del proyecto
+```bash
+/GyV             → HTML del sistema
+/core            → Inicio y dashboard
+/documentos      → Subida, vista previa y gestión de archivos
+/convenios       → Administración de convenios activos
+/reportes        → Generación de constancias en PDF
+/pendientes      → Tareas asignadas y seguimiento
+/accounts        → Roles, permisos y autenticación
+/static          → CSS, JS e imágenes
+/templates       → HTML del sistema
+```
+
+---
+
+## 📄 Tecnologías principales
+
+- **Backend:** Python 3, Django 5, SQLite
+- **Frontend:** HTML, CSS, diseño generado con Antigravity
+- **Documentos PDF:** xhtml2pdf, ReportLab, PyPDF, Pillow
+- **Soporte adicional:** lxml, Cairo, svglib, html5lib, tinycss2
+
+---
+
+## Notas importantes
+
+- El diseño es un completo **CAOS**, recomiendo solo cambiar la palenta de colores.
+- Es mi primer proyecto web.
+- Puede haber funciones ignoradas o mal comentadas o que se puedan mejorar (especialmente que se puedan mejorar)
+- Si quieres usar otra base de datos, ajusta la configuracion en settings.py
+- El proyecto esta estructurado para facilitar agregar nuevos módulos.
+
+---
+
+## Licencia
+
+Proyecto de uso académico.
+Puedes modificarlo libremente para fines personales o educativos.
