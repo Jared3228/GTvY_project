@@ -102,7 +102,7 @@ http://127.0.0.1:8000/
 
 ## Notas importantes
 
-- El diseño es un completo **CAOS**, recomiendo solo cambiar la palenta de colores.
+- El diseño es un completo **CAOS**, recomiendo solo cambiar la paleta de colores y mucha paciencia.
 - Es mi primer proyecto web.
 - Puede haber funciones ignoradas o mal comentadas o que se puedan mejorar (especialmente que se puedan mejorar)
 - Si quieres usar otra base de datos, ajusta la configuracion en settings.py
