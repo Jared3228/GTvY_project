@@ -77,15 +77,16 @@ http://127.0.0.1:8000/
 
 ## Estructura del proyecto
 ```bash
-/GyV             → HTML del sistema
-/core            → Inicio y dashboard
-/documentos      → Subida, vista previa y gestión de archivos
-/convenios       → Administración de convenios activos
+/GyV             → Carpeta principal del proyecto (settings, urls, wsgi)
+/core            → Página de inicio y dashboard
+/documentos      → Subida y previsualización de archivos PDF
+/convenios       → Gestión de convenios
 /reportes        → Generación de constancias en PDF
-/pendientes      → Tareas asignadas y seguimiento
+/pendientes      → Sistema de tareas asignadas
 /accounts        → Roles, permisos y autenticación
-/static          → CSS, JS e imágenes
-/templates       → HTML del sistema
+/static          → Archivos CSS, JS e imágenes
+/templates       → Plantillas HTML del sistema
+
 ```
 
 ---
